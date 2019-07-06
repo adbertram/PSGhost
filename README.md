@@ -10,6 +10,10 @@
   Save-GhostConfigurationItem -Label ContentApiKey -Value 'XXXXXXXXX'
   Save-GhostConfigurationItem -Label AdminApiKey -Value 'XXXXXXXX'
   Save-GhostConfigurationItem -Label ApiUrl -Value 'https://<account-name>.ghost.io'
+  Save-GhostConfigurationItem -Label UserName -Value 'XXXXXX'
+  Save-GhostConfigurationItem -Label UserPassword -Value 'XXXXXXXX'
   ```
 4. Run `Get-GhostConfiguration` to ensure all API keys are returned decrypted.
 5. Run a command to ensure no errors are returned: `Get-GhostSettings`.
+
+## FYI: Only tested on Ghost(Pro)
