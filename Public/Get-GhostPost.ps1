@@ -29,8 +29,9 @@ function Get-GhostPost {
 
     $endPointLabel = 'posts'
 
+    ## TODO: This needs to be admin at some point to find draft and other posts
     $invParams = @{
-        Api = 'content'
+        Api = 'admin'
     }
     
     if ($PSBoundParameters.ContainsKey('Id')) {
@@ -41,9 +42,8 @@ function Get-GhostPost {
         $invParams.Endpoint = $endPointLabel
     }
 
-    $invParams.Body = @{ }
     if ($PSBoundParameters.ContainsKey('Page')) {
-        $invParams.Body['page'] = $Page
+        $invParams.Body = @{ 'page' = $Page }
     }
     if ($PSBoundParameters.ContainsKey('Include')) {
         $invParams.Include = $Include
@@ -51,6 +51,7 @@ function Get-GhostPost {
     if ($PSBoundParameters.ContainsKey('Title')) {
         $invParams.Filter = @{ 'title' = $Title }
     }
+
 
     $pageResult = Invoke-GhostApiCall @invParams
     if ($pageResult.$endPointLabel) {

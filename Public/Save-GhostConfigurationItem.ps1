@@ -3,7 +3,7 @@ function Save-GhostConfigurationItem {
     param (
         [Parameter(Mandatory)]
         [ValidateNotNullOrEmpty()]
-        [ValidateSet('ContentApiKey', 'AdminApiKey', 'ApiUrl')]
+        [ValidateSet('ContentApiKey', 'AdminApiKey', 'ApiUrl', 'UserName', 'UserPassword')]
         [string]$Label,
 
         [Parameter(Mandatory)]
