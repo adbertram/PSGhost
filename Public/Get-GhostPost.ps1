@@ -9,7 +9,11 @@ function Get-GhostPost {
 
         [Parameter(ParameterSetName = 'BySlug')]
         [ValidateNotNullOrEmpty()]
-        [string]$Slug
+        [string]$Slug,
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [string]$Title
     )
 
     $ErrorActionPreference = 'Stop'
@@ -17,7 +21,7 @@ function Get-GhostPost {
     $invParams = @{
         Api = 'content'
     }
-    if ($PSBoundParameters.Keys.Count -eq 0) {
+    if ($PSBoundParameters.Keys -notcontains 'Id' -and $PSBoundParameters.Keys -notcontains 'Id') {
         $invParams.Endpoint = 'posts'
     } elseif ($PSBoundParameters.ContainsKey('Id')) {
         $invParams.Endpoint = "posts/$Id"

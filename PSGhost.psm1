@@ -1,6 +1,7 @@
 Set-StrictMode -Version Latest
 
-$configFilePath = "$PSScriptRoot\configuration.json"
+$configFilePath = "$env:LOCALAPPDATA\PSGhost\configuration.json"
+$configTemplateFilePath = "$PSScriptRoot\configuration_template.json"
 $configItemsToEncrypt = 'ContentApiKey', 'AdminApiKey'
 
 # Get public and private function definition files.
