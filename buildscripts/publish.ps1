@@ -15,7 +15,7 @@ try {
 
     )
     $exclude = $excludeFromPublish -join '|'
-    Get-ChildItem -Path $env:APPVEYOR_BUILD_FOLDER -Recurse | where { $_.FullName -match $exclude } | Remove-Item -Force -Recurse
+    Get-ChildItem -Path $env:APPVEYOR_BUILD_FOLDER -Force -Recurse | where { $_.FullName -match $exclude } | Remove-Item -Force -Recurse
 
     ## Publish module to PowerShell Gallery
     $publishParams = @{
