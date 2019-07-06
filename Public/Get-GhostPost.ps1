@@ -17,6 +17,11 @@ function Get-GhostPost {
 
         [Parameter()]
         [ValidateNotNullOrEmpty()]
+        [ValidateSet('authors', 'tags')]
+        [string[]]$Include,
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
         [int]$Page
     )
 
@@ -27,27 +32,34 @@ function Get-GhostPost {
     $invParams = @{
         Api = 'content'
     }
-    if ($PSBoundParameters.Keys -notcontains 'Id' -and $PSBoundParameters.Keys -notcontains 'Id') {
-        $invParams.Endpoint = $endPointLabel
-    } elseif ($PSBoundParameters.ContainsKey('Id')) {
+    
+    if ($PSBoundParameters.ContainsKey('Id')) {
         $invParams.Endpoint = "$endPointLabel/$Id"
     } elseif ($PSBoundParameters.ContainsKey('Slug')) {
         $invParams.Endpoint = "$endPointLabel/slug/$Slug"
+    } else {
+        $invParams.Endpoint = $endPointLabel
     }
 
+    $invParams.Body = @{ }
     if ($PSBoundParameters.ContainsKey('Page')) {
-        $invParams.Body = @{ 'page' = $Page }
+        $invParams.Body['page'] = $Page
     }
-    $pageResult = Invoke-GhostApiCall @invParams
-    $whereFilter = { '*' }
+    if ($PSBoundParameters.ContainsKey('Include')) {
+        $invParams.Include = $Include
+    }
     if ($PSBoundParameters.ContainsKey('Title')) {
-        $whereFilter = { $_.title -eq $Title }
+        $invParams.Filter = @{ 'title' = $Title }
     }
-    @($pageResult.$endPointLabel).where($whereFilter)
-    
-    if ($pageResult.meta.pagination.next) {
-        $getParams = $PSBoundParameters
-        $getParams['Page'] = $pageResult.meta.pagination.next
-        Get-GhostPost @getParams
+
+    $pageResult = Invoke-GhostApiCall @invParams
+    if ($pageResult.$endPointLabel) {
+        $pageResult.$endPointLabel
+
+        if ($pageResult.PSObject.Properties.Name -contains 'meta' -and $pageResult.meta.pagination.next) {
+            $getParams = $PSBoundParameters
+            $getParams['Page'] = $pageResult.meta.pagination.next
+            Get-GhostPost @getParams
+        }
     }
 }
