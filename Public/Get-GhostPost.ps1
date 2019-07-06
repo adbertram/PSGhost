@@ -29,11 +29,7 @@ function Get-GhostPost {
 
     $endPointLabel = 'posts'
 
-    ## TODO: This needs to be admin at some point to find draft and other posts
-    $invParams = @{
-        Api = 'admin'
-    }
-    
+    $invParams = @{ }    
     if ($PSBoundParameters.ContainsKey('Id')) {
         $invParams.Endpoint = "$endPointLabel/$Id"
     } elseif ($PSBoundParameters.ContainsKey('Slug')) {
