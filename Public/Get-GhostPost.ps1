@@ -28,5 +28,12 @@ function Get-GhostPost {
     } elseif ($PSBoundParameters.ContainsKey('Slug')) {
         $invParams.Endpoint = "posts/slug/$Slug"
     }
-    Invoke-GhostApiCall @invParams
+    $result = Invoke-GhostApiCall @invParams
+    
+    ## Filter posts locally for all other filter criteria
+    if ($result) {
+        if ($PSBoundParameters.ContainsKey('Title')) {
+            @($result).where({ $_.title -eq $Title })
+        }
+    }
 }
