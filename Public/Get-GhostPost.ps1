@@ -13,27 +13,41 @@ function Get-GhostPost {
 
         [Parameter()]
         [ValidateNotNullOrEmpty()]
-        [string]$Title
+        [string]$Title,
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [int]$Page
     )
 
     $ErrorActionPreference = 'Stop'
+
+    $endPointLabel = 'posts'
 
     $invParams = @{
         Api = 'content'
     }
     if ($PSBoundParameters.Keys -notcontains 'Id' -and $PSBoundParameters.Keys -notcontains 'Id') {
-        $invParams.Endpoint = 'posts'
+        $invParams.Endpoint = $endPointLabel
     } elseif ($PSBoundParameters.ContainsKey('Id')) {
-        $invParams.Endpoint = "posts/$Id"
+        $invParams.Endpoint = "$endPointLabel/$Id"
     } elseif ($PSBoundParameters.ContainsKey('Slug')) {
-        $invParams.Endpoint = "posts/slug/$Slug"
+        $invParams.Endpoint = "$endPointLabel/slug/$Slug"
     }
-    $result = Invoke-GhostApiCall @invParams
+
+    if ($PSBoundParameters.ContainsKey('Page')) {
+        $invParams.Body = @{ 'page' = $Page }
+    }
+    $pageResult = Invoke-GhostApiCall @invParams
+    $whereFilter = { '*' }
+    if ($PSBoundParameters.ContainsKey('Title')) {
+        $whereFilter = { $_.title -eq $Title }
+    }
+    @($pageResult.$endPointLabel).where($whereFilter)
     
-    ## Filter posts locally for all other filter criteria
-    if ($result) {
-        if ($PSBoundParameters.ContainsKey('Title')) {
-            @($result).where({ $_.title -eq $Title })
-        }
+    if ($pageResult.meta.pagination.next) {
+        $getParams = $PSBoundParameters
+        $getParams['Page'] = $pageResult.meta.pagination.next
+        Get-GhostPost @getParams
     }
 }

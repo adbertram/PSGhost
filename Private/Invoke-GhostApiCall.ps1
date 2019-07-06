@@ -34,7 +34,11 @@ function Invoke-GhostApiCall {
         
         [Parameter()]
         [ValidateNotNullOrEmpty()]
-        [string]$ApiKey
+        [string]$ApiKey,
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [hashtable]$Body
     )
 
     $ErrorActionPreference = 'Stop'
@@ -59,10 +63,10 @@ function Invoke-GhostApiCall {
         $invParams = @{
             Uri = "$ApiUrl/ghost/api/v2/$Api/$Endpoint/?key=$ApiKey"
         }
-        $result = Invoke-RestMethod @invParams
-
-        $returnType = $Endpoint.split('/')[0]
-        $result.$returnType
+        if ($PSBoundParameters.ContainsKey('Body')) {
+            $invParams.Body = $Body
+        }
+        Invoke-RestMethod @invParams
     } catch {
         $PSCmdlet.ThrowTerminatingError($_)
     }
