@@ -10,5 +10,5 @@ function Get-GhostSettings {
         Api      = 'content'
         Endpoint = 'settings'
     }
-    Invoke-GhostApiCall @invParams
+    (Invoke-GhostApiCall @invParams).settings
 }

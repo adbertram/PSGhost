@@ -22,6 +22,11 @@ function Get-GhostPost {
 
         [Parameter()]
         [ValidateNotNullOrEmpty()]
+        [ValidateSet('mobiledoc', 'html', 'plaintext')]
+        [string]$Format = 'mobiledoc',
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
         [int]$Page
     )
 
@@ -29,7 +34,9 @@ function Get-GhostPost {
 
     $endPointLabel = 'posts'
 
-    $invParams = @{ }    
+    $invParams = @{
+        Format = $Format
+    }    
     if ($PSBoundParameters.ContainsKey('Id')) {
         $invParams.Endpoint = "$endPointLabel/$Id"
     } elseif ($PSBoundParameters.ContainsKey('Slug')) {
@@ -47,7 +54,6 @@ function Get-GhostPost {
     if ($PSBoundParameters.ContainsKey('Title')) {
         $invParams.Filter = @{ 'title' = $Title }
     }
-
 
     $pageResult = Invoke-GhostApiCall @invParams
     if ($pageResult.$endPointLabel) {

@@ -28,7 +28,7 @@ function Invoke-GhostApiCall {
 
         [Parameter()]
         [ValidateNotNullOrEmpty()]
-        [string]$Format = 'html',
+        [string]$Format,
 
         [Parameter()]
         [ValidateNotNullOrEmpty()]
@@ -74,8 +74,10 @@ function Invoke-GhostApiCall {
         $request = [System.UriBuilder]"$ApiUrl/ghost/api/v2/$Api/$Endpoint"
 
         $queryParams = @{
-            'key'     = $ApiKey
-            'formats' = $Format -join ','
+            'key' = $ApiKey
+        }
+        if ($PSBoundParameters.ContainsKey('Format')) {
+            $queryParams.Formats = $Format -join ','
         }
         if ($PSBoundParameters.ContainsKey('Include')) {
             $queryParams.Include = $Include -join ','
