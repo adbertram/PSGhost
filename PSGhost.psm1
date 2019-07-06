@@ -1,5 +1,8 @@
 Set-StrictMode -Version Latest
 
+$configFilePath = "$PSScriptRoot\configuration.json"
+$configItemsToEncrypt = 'ContentApiKey', 'AdminApiKey'
+
 # Get public and private function definition files.
 $Public = @(Get-ChildItem -Path $PSScriptRoot\Public\*.ps1 -ErrorAction SilentlyContinue)
 $Private = @(Get-ChildItem -Path $PSScriptRoot\Private\*.ps1 -ErrorAction SilentlyContinue)

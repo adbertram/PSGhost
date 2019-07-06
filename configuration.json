@@ -1,3 +1,5 @@
 {
-    "ApiKey": "XXXXXX"
+    "ContentApiKey": "XXXXX",
+    "AdminApiKey": "XXXXX",
+    "ApiUrl": "XXXXX"
 }

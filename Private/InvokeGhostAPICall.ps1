@@ -23,8 +23,8 @@ function InvokeGhostAPICall {
 
     $ErrorActionPreference = 'Stop'
 
-    if ($PSBoundParameters.ContainsKey('SiteUrl')) {
-        ## get from config
+    if (-not $PSBoundParameters.ContainsKey('SiteUrl')) {
+        
     }
 
     $invParams = @{
