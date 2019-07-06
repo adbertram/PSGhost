@@ -1,5 +1,5 @@
 {
-    "ContentApiKey": "XXXXX",
-    "AdminApiKey": "XXXXX",
-    "ApiUrl": "XXXXX"
+    "ContentApiKey": "XXXXXXX",
+    "AdminApiKey": "XXXXXX",
+    "ApiUrl": "https://<accountname>.ghost.io"
 }
