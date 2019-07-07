@@ -27,6 +27,10 @@ function Get-GhostPost {
 
         [Parameter()]
         [ValidateNotNullOrEmpty()]
+        [switch]$WordCount,
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
         [int]$Page
     )
 
