@@ -46,7 +46,7 @@ function Get-GhostPost {
     }
 
     if ($PSBoundParameters.ContainsKey('Page')) {
-        $invParams.Body = @{ 'page' = $Page }
+        $invParams.Page = $Page
     }
     if ($PSBoundParameters.ContainsKey('Include')) {
         $invParams.Include = $Include

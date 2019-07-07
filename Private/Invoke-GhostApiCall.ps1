@@ -18,10 +18,6 @@ function Invoke-GhostApiCall {
         [Parameter()]
         [ValidateNotNullOrEmpty()]
         [string]$ApiUrl = (Get-GhostConfiguration).ApiUrl,
-        
-        [Parameter()]
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiKey,
 
         [Parameter()]
         [hashtable]$Body,
@@ -29,6 +25,15 @@ function Invoke-GhostApiCall {
         [Parameter()]
         [ValidateNotNullOrEmpty()]
         [string]$Format,
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [int]$Page,
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [ValidateSet('html')]
+        [string]$Source,
 
         [Parameter()]
         [ValidateNotNullOrEmpty()]
@@ -43,22 +48,9 @@ function Invoke-GhostApiCall {
 
     try {
 
+        $baseEndpoint = $Endpoint.split('/')[0]
+
         $config = Get-GhostConfiguration
-        if (-not $PSBoundParameters.ContainsKey('ApiKey')) {
-            switch ($Api) {
-                'content' {
-                    $ApiKey = $config.ContentApiKey
-                    break
-                }
-                'admin' {
-                    $ApiKey = $config.AdminApiKey
-                    break
-                }
-                default {
-                    throw "Unrecognized APIKey: [$_]"
-                }
-            }
-        }
 
         if (-not (Get-Variable -Name ghostSession -Scope Script -ErrorAction Ignore)) {
             Set-GhostSession
@@ -73,9 +65,7 @@ function Invoke-GhostApiCall {
 
         $request = [System.UriBuilder]"$ApiUrl/ghost/api/v2/$Api/$Endpoint"
 
-        $queryParams = @{
-            'key' = $ApiKey
-        }
+        $queryParams = @{}
         if ($PSBoundParameters.ContainsKey('Format')) {
             $queryParams.Formats = $Format -join ','
         }
@@ -84,6 +74,12 @@ function Invoke-GhostApiCall {
         }
         if ($PSBoundParameters.ContainsKey('Filter')) {
             $queryParams.Filter = New-Filter -Filter $Filter
+        }
+        if ($PSBoundParameters.ContainsKey('Source')) {
+            $queryParams.Source = $Source
+        }
+        if ($PSBoundParameters.ContainsKey('Page')) {
+            $queryParams.Page = $Page
         }
 
         $params = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
@@ -94,7 +90,7 @@ function Invoke-GhostApiCall {
         $invParams.Uri = $request.Uri
 
         if ($Body) {
-            $invParams.Body = (@{ $Endpoint = $Body } | ConvertTo-Json)
+            $invParams.Body = (@{$baseEndpoint = @($Body) } | ConvertTo-Json)
         }
         
         Invoke-RestMethod @invParams
