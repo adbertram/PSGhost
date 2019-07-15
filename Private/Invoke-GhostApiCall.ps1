@@ -38,6 +38,10 @@ function Invoke-GhostApiCall {
         [Parameter()]
         [ValidateNotNullOrEmpty()]
         [string[]]$Include,
+        
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [string]$ContentType,
 
         [Parameter()]
         [ValidateNotNullOrEmpty()]
@@ -57,15 +61,19 @@ function Invoke-GhostApiCall {
         }
 
         $invParams = @{
-            Headers     = @{ 'Origin' = $config.ApiUrl }
-            ContentType = 'application/json'
-            WebSession  = $script:ghostSession
-            Method      = $Method
+            Headers    = @{ 'Origin' = $config.ApiUrl }
+            WebSession = $script:ghostSession
+            Method     = $Method
+        }
+        if ($PSBoundParameters.ContainsKey('ContentType')) {
+            $invParams.ContentType = $ContentType
+        } else {
+            $invParams.ContentType = 'application/json'
         }
 
         $request = [System.UriBuilder]"$ApiUrl/ghost/api/v2/$Api/$Endpoint"
 
-        $queryParams = @{}
+        $queryParams = @{ }
         if ($PSBoundParameters.ContainsKey('Format')) {
             $queryParams.Formats = $Format -join ','
         }

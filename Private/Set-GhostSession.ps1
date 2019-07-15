@@ -9,7 +9,7 @@ function Set-GhostSession {
     $invParams = @{
         Headers         = @{ 'Origin' = $config.ApiUrl }
         Body            = @{'username' = $config.UserName; 'password' = $config.UserPassword }
-        Uri             = "$apiUrl/ghost/api/v2/admin/session/"
+        Uri             = "$($config.ApiUrl)/ghost/api/v2/admin/session/"
         SessionVariable = 'session'
         Method          = 'POST'
     }
