@@ -50,7 +50,7 @@ function New-GhostPost {
             markups  = @()
             sections = @(, @(10, 0))
         }
-        $postBody.mobiledoc = ($mobileDoc | ConvertTo-Json -Depth 10 -Compress) -replace '"', '\"'
+        $postBody.mobiledoc = $mobileDoc
     }
 
     if ($PSBoundParameters.ContainsKey('Tags')) {

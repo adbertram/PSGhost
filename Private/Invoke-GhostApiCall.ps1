@@ -60,15 +60,15 @@ function Invoke-GhostApiCall {
             Set-GhostSession
         }
 
-        $invParams = @{
+        $ivrParams = @{
             Headers    = @{ 'Origin' = $config.ApiUrl }
             WebSession = $script:ghostSession
             Method     = $Method
         }
         if ($PSBoundParameters.ContainsKey('ContentType')) {
-            $invParams.ContentType = $ContentType
+            $ivrParams.ContentType = $ContentType
         } else {
-            $invParams.ContentType = 'application/json'
+            $ivrParams.ContentType = 'application/json'
         }
 
         $request = [System.UriBuilder]"$ApiUrl/ghost/api/v2/$Api/$Endpoint"
@@ -95,13 +95,17 @@ function Invoke-GhostApiCall {
             $params[$queryParam.Key.ToLower()] = $queryParam.Value
         }
         $request.Query = $params.ToString()
-        $invParams.Uri = $request.Uri
+        $ivrParams.Uri = $request.Uri
 
         if ($Body) {
-            $invParams.Body = (@{$baseEndpoint = @($Body) } | ConvertTo-Json | foreach { [System.Text.RegularExpressions.Regex]::Unescape($_) })
+            if ($Body.ContainsKey('mobiledoc')) {
+                # $Body.mobiledoc = ($mobileDoc | ConvertTo-Json -Depth 100 -Compress) -replace '"', '\"' -replace '\\n', '\\n'
+                $Body.mobiledoc = $mobileDoc | ConvertTo-Json -Depth 100 -Compress
+            }
+            $ivrParams.Body = @{$baseEndpoint = @($Body) } | ConvertTo-Json -Depth 100
         }
         
-        Invoke-RestMethod @invParams
+        Invoke-RestMethod @ivrParams
     } catch {
         $PSCmdlet.ThrowTerminatingError($_)
     }
