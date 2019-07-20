@@ -98,7 +98,7 @@ function Invoke-GhostApiCall {
         $invParams.Uri = $request.Uri
 
         if ($Body) {
-            $invParams.Body = (@{$baseEndpoint = @($Body) } | ConvertTo-Json)
+            $invParams.Body = (@{$baseEndpoint = @($Body) } | ConvertTo-Json | foreach { [System.Text.RegularExpressions.Regex]::Unescape($_) })
         }
         
         Invoke-RestMethod @invParams
