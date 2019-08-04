@@ -52,6 +52,9 @@ function Invoke-GhostApiCall {
 
     try {
 
+        ## Prevents "The underlying connection was closed: Could not establish trust relationship for the SSL/TLS secure channel"
+        [System.Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+
         $baseEndpoint = $Endpoint.split('/')[0]
 
         $config = Get-GhostConfiguration
@@ -99,9 +102,25 @@ function Invoke-GhostApiCall {
 
         if ($Body) {
             if ($Body.ContainsKey('mobiledoc')) {
-                # $Body.mobiledoc = ($mobileDoc | ConvertTo-Json -Depth 100 -Compress) -replace '"', '\"' -replace '\\n', '\\n'
-                $Body.mobiledoc = $mobileDoc | ConvertTo-Json -Depth 100 -Compress
+                $bodyFixed = $Body.mobiledoc
+                if ($bodyFixed -isnot 'string') {
+                    $bodyFixed = $bodyFixed | ConvertTo-Json -Depth 100 -Compress
+                }
+            } else {
+                $bodyFixed = $Body.html
             }
+
+            ## replace smart quotes
+            $smartSingleQuotes = '[\u2019\u2018]'
+            $smartDoubleQuotes = '[\u201C\u201D]'
+
+            $bodyFixed = $bodyFixed -replace $smartSingleQuotes, "'" -replace $smartDoubleQuotes, '"' -replace '“', '"' -replace '“', '"'
+            if ($PSBoundParameters.ContainsKey('')) {
+                $Body.mobiledoc = $bodyFixed
+            } else {
+                $Body.html = $bodyFixed
+            }
+
             $ivrParams.Body = @{$baseEndpoint = @($Body) } | ConvertTo-Json -Depth 100
         }
         

@@ -3,7 +3,7 @@ function Set-GhostPost {
     [CmdletBinding(DefaultParameterSetName = 'None')]
     param
     (
-        [Parameter(Mandatory,ValueFromPipeline)]
+        [Parameter(Mandatory, ValueFromPipeline)]
         [ValidateNotNullOrEmpty()]
         [pscustomobject]$Post,
 
@@ -13,7 +13,15 @@ function Set-GhostPost {
 
         [Parameter()]
         [ValidateNotNullOrEmpty()]
+        [string]$Excerpt,
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
         [string]$Html,
+        
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [string]$MobileDoc,
 
         [Parameter()]
         [ValidateNotNullOrEmpty()]
@@ -26,7 +34,7 @@ function Set-GhostPost {
 
     $invParams = @{
         Endpoint = "$endPointLabel/$($Post.id)"
-        Method = 'PUT'
+        Method   = 'PUT'
     }
 
     $body = @{ 'updated_at' = $Post.updated_at }
@@ -34,9 +42,15 @@ function Set-GhostPost {
     if ($PSBoundParameters.ContainsKey('Title')) {
         $body.title = $Title
     }
+    if ($PSBoundParameters.ContainsKey('Excerpt')) {
+        $body.custom_excerpt = $Excerpt
+    }
     if ($PSBoundParameters.ContainsKey('Html')) {
         $invParams.Source = 'html'
         $body.html = $Html
+    }
+    if ($PSBoundParameters.ContainsKey('MobileDoc')) {
+        $body.mobiledoc = $MobileDoc
     }
     $invParams.Body = $body
     
