@@ -3,9 +3,9 @@ function Get-GhostUser {
     [CmdletBinding()]
     param
     (
-        [Parameter(Mandatory, ParameterSetName = 'ByEmail')]
+        [Parameter(ParameterSetName = 'ByEmail')]
         [ValidateNotNullOrEmpty()]
-        [string]$EmailAddreess
+        [string]$EmailAddress
     )
 
     $ErrorActionPreference = 'Stop'
@@ -13,10 +13,17 @@ function Get-GhostUser {
     $endPointLabel = 'users'
 
     $invParams = @{
-        Endpoint       = $endPointLabel
-        HttpParameters = @{ 'userName' = $EmailAddreess }
+        Endpoint = $endPointLabel
     }
 
     $result = Invoke-GhostApiCall @invParams
-    $result.$endPointLabel
+    
+    if ($result.$endPointLabel) {
+        $whereFilter = { '*' }
+        if ($PSBoundParameters.ContainsKey('EmailAddress')) {
+            ## using where here since no docs on how to limit by username
+            $whereFilter = { $_.email -eq $EmailAddress }
+        }
+        $result.$endPointLabel | Where-Object -FilterScript $whereFilter
+    }
 }
