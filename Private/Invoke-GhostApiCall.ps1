@@ -20,6 +20,10 @@ function Invoke-GhostApiCall {
         [string]$ApiUrl = (Get-GhostConfiguration).ApiUrl,
 
         [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [hashtable]$HttpParameters = @{ },
+
+        [Parameter()]
         [hashtable]$Body,
 
         [Parameter()]
@@ -75,26 +79,25 @@ function Invoke-GhostApiCall {
         }
 
         $request = [System.UriBuilder]"$ApiUrl/ghost/api/v2/$Api/$Endpoint"
-
-        $queryParams = @{ }
+        
         if ($PSBoundParameters.ContainsKey('Format')) {
-            $queryParams.Formats = $Format -join ','
+            $HttpParameters.Formats = $Format -join ','
         }
         if ($PSBoundParameters.ContainsKey('Include')) {
-            $queryParams.Include = $Include -join ','
+            $HttpParameters.Include = $Include -join ','
         }
         if ($PSBoundParameters.ContainsKey('Filter')) {
-            $queryParams.Filter = New-Filter -Filter $Filter
+            $HttpParameters.Filter = New-Filter -Filter $Filter
         }
         if ($PSBoundParameters.ContainsKey('Source')) {
-            $queryParams.Source = $Source
+            $HttpParameters.Source = $Source
         }
         if ($PSBoundParameters.ContainsKey('Page')) {
-            $queryParams.Page = $Page
+            $HttpParameters.Page = $Page
         }
 
         $params = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
-        foreach ($queryParam in $queryParams.GetEnumerator()) {
+        foreach ($queryParam in $HttpParameters.GetEnumerator()) {
             $params[$queryParam.Key.ToLower()] = $queryParam.Value
         }
         $request.Query = $params.ToString()
