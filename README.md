@@ -15,5 +15,3 @@
   ```
 4. Run `Get-GhostConfiguration` to ensure all API keys are returned decrypted.
 5. Run a command to ensure no errors are returned: `Get-GhostSettings`.
-
-## FYI: Only tested on Ghost(Pro)
