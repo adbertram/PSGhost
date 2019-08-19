@@ -109,8 +109,10 @@ function Invoke-GhostApiCall {
                 if ($bodyFixed -isnot 'string') {
                     $bodyFixed = $bodyFixed | ConvertTo-Json -Depth 100 -Compress
                 }
-            } else {
+            } elseif ($Body.ContainsKey('html')) {
                 $bodyFixed = $Body.html
+            } else {
+                $bodyFixed = $Body
             }
 
             ## replace smart quotes
@@ -118,9 +120,9 @@ function Invoke-GhostApiCall {
             $smartDoubleQuotes = '[\u201C\u201D]'
 
             $bodyFixed = $bodyFixed -replace $smartSingleQuotes, "'" -replace $smartDoubleQuotes, '"' -replace '“', '"' -replace '“', '"'
-            if ($PSBoundParameters.ContainsKey('')) {
+            if ($Body.ContainsKey('mobiledoc')) {
                 $Body.mobiledoc = $bodyFixed
-            } else {
+            } elseif ($Body.ContainsKey('html')) {
                 $Body.html = $bodyFixed
             }
 
