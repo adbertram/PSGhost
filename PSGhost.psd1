@@ -6,7 +6,7 @@
     CompanyName       = 'Adam the Automator, LLC'
     Copyright         = '(c) 2017 Adam Bertram. All rights reserved.'
     Description       = "This module is used to interact with the blogging platform, Ghost's API."
-    PowerShellVersion = '5.0'
+    PowerShellVersion = '6.0'
     FunctionsToExport = '*'
     CmdletsToExport   = '*'
     VariablesToExport = '*'
