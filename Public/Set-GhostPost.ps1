@@ -17,6 +17,10 @@ function Set-GhostPost {
 
         [Parameter()]
         [ValidateNotNullOrEmpty()]
+        [uri]$FeatureImageUrl,
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
         [string]$Html,
         
         [Parameter()]
@@ -44,6 +48,9 @@ function Set-GhostPost {
     }
     if ($PSBoundParameters.ContainsKey('Excerpt')) {
         $body.custom_excerpt = $Excerpt
+    }
+    if ($PSBoundParameters.ContainsKey('FeatureImageUrl')) {
+        $body.feature_image = $FeatureImageUrl.AbsoluteUri
     }
     if ($PSBoundParameters.ContainsKey('Html')) {
         $invParams.Source = 'html'
