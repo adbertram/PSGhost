@@ -9,8 +9,8 @@ try {
     $publicFunctions = Get-ChildItem -Path "$env:APPVEYOR_BUILD_FOLDER\Public" | Select-Object -ExpandProperty BaseName
     $functionsToExport = ($publicFunctions | foreach { "'$_'" }) -join ','
     $replacements = @{
-        "ModuleVersion\s+=\s+'\1\.0\.0'" = "ModuleVersion = '$env:APPVEYOR_BUILD_VERSION'"
-        "FunctionsToExport\s+=\s+'\*'"   = "FunctionsToExport = $functionsToExport"
+        "ModuleVersion\s+=\s+'1\.0\.0'" = "ModuleVersion = '$env:APPVEYOR_BUILD_VERSION'"
+        "FunctionsToExport\s+=\s+'\*'"  = "FunctionsToExport = $functionsToExport"
     }		
 
     $replacements.GetEnumerator() | foreach {
