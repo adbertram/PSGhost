@@ -2,14 +2,14 @@ $ErrorActionPreference = 'Stop'
 
 try {
 
-    $provParams = @{
-        Name           = 'NuGet'
-        MinimumVersion = '2.8.5.208'
-        Force          = $true
-    }
+    # $provParams = @{
+    #     Name           = 'NuGet'
+    #     MinimumVersion = '2.8.5.208'
+    #     Force          = $true
+    # }
 
-    $null = Install-PackageProvider @provParams
-    $null = Import-PackageProvider @provParams
+    # $null = Install-PackageProvider @provParams
+    # $null = Import-PackageProvider @provParams
 
     $requiredModules = @('PSPostMan')
     foreach ($m in $requiredModules) {
