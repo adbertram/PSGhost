@@ -58,6 +58,7 @@ function Invoke-GhostApiCall {
 
         ## Prevents "The underlying connection was closed: Could not establish trust relationship for the SSL/TLS secure channel"
         [System.Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+        [System.Net.ServicePointManager]::ServerCertificateValidationCallback = { return $true }
 
         $baseEndpoint = $Endpoint.split('/')[0]
 
