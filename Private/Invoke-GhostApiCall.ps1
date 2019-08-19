@@ -57,8 +57,8 @@ function Invoke-GhostApiCall {
     try {
 
         ## Prevents "The underlying connection was closed: Could not establish trust relationship for the SSL/TLS secure channel"
-        [System.Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-        [System.Net.ServicePointManager]::ServerCertificateValidationCallback = { return $true }
+        # [System.Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+        # [System.Net.ServicePointManager]::ServerCertificateValidationCallback = { return $true }
 
         $baseEndpoint = $Endpoint.split('/')[0]
 
@@ -69,9 +69,10 @@ function Invoke-GhostApiCall {
         }
 
         $ivrParams = @{
-            Headers    = @{ 'Origin' = $config.ApiUrl }
-            WebSession = $script:ghostSession
-            Method     = $Method
+            Headers              = @{ 'Origin' = $config.ApiUrl }
+            WebSession           = $script:ghostSession
+            Method               = $Method
+            SkipCertificateCheck = $true
         }
         if ($PSBoundParameters.ContainsKey('ContentType')) {
             $ivrParams.ContentType = $ContentType
