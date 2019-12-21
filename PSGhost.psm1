@@ -1,6 +1,6 @@
 Set-StrictMode -Version Latest
 
-$script:configFilePath = "$env:LOCALAPPDATA\PSGhost\configuration.json"
+$script:configFilePath = "$($PSScriptRoot | Split-Path -Parent)\configuration.json"
 $script:configTemplateFilePath = "$PSScriptRoot\configuration_template.json"
 $script:configItemsToEncrypt = 'ContentApiKey', 'AdminApiKey', 'UserPassword'
 

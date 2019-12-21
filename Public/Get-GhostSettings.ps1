@@ -7,7 +7,6 @@ function Get-GhostSettings {
     $ErrorActionPreference = 'Stop'
 
     $invParams = @{
-        Api      = 'content'
         Endpoint = 'settings'
     }
     (Invoke-GhostApiCall @invParams).settings
