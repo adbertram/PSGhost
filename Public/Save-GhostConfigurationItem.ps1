@@ -19,12 +19,12 @@ function Save-GhostConfigurationItem {
 
     New-ConfigurationFile
 
-    $config = Get-Content -Path $configFilePath -Raw | ConvertFrom-Json
+    $config = Get-Content -Path $script:configFilePath -Raw | ConvertFrom-Json
 
-    if ($Label -in $configItemsToEncrypt) {
+    if ($Label -in $script:configItemsToEncrypt) {
         $Value = encrypt $Value
     }
     $config.$Label = $Value
 
-    $config | ConvertTo-Json | Set-Content -Path $configFilePath
+    $config | ConvertTo-Json | Set-Content -Path $script:configFilePath
 }

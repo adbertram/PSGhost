@@ -1,8 +1,8 @@
 Set-StrictMode -Version Latest
 
-$configFilePath = "$env:LOCALAPPDATA\PSGhost\configuration.json"
-$configTemplateFilePath = "$PSScriptRoot\configuration_template.json"
-$configItemsToEncrypt = 'ContentApiKey', 'AdminApiKey', 'UserPassword'
+$script:configFilePath = "$env:LOCALAPPDATA\PSGhost\configuration.json"
+$script:configTemplateFilePath = "$PSScriptRoot\configuration_template.json"
+$script:configItemsToEncrypt = 'ContentApiKey', 'AdminApiKey', 'UserPassword'
 
 ## Prevents "The underlying connection was closed: Could not establish trust relationship for the SSL/TLS secure channel"
 [System.Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
