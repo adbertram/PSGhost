@@ -1,7 +1,7 @@
 Set-StrictMode -Version Latest
 
-$script:configFilePath = "$($PSScriptRoot | Split-Path -Parent)\configuration.json"
-$script:configTemplateFilePath = "$PSScriptRoot\configuration_template.json"
+$script:configFilePath = Join-Path -Path '~' -ChildPath 'PSGhost-configuration.json'
+$script:configTemplateFilePath = Join-Path -Path $PSScriptRoot -ChildPath 'configuration_template.json'
 $script:configItemsToEncrypt = 'ContentApiKey', 'AdminApiKey', 'UserPassword'
 
 ## Prevents "The underlying connection was closed: Could not establish trust relationship for the SSL/TLS secure channel"

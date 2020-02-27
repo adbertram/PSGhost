@@ -8,11 +8,10 @@ function New-ConfigurationFile {
     $ErrorActionPreference = 'Stop'
 
     $configFileFolderPath = $script:configFilePath | Split-Path -Parent
-    if (-not (Test-Path -Path $configFileFolderPath -PathType Container)) {
-        $null = New-Item -Path $configFileFolderPath -ItemType 'Directory'
-    }
+    $script:configTemplateFilePath
 
     if (-not (Test-Path -Path $script:configFilePath -PathType Leaf)) {
-        Copy-Item -Path $script:configTemplateFilePath -Destination "$configFileFolderPath\configuration.json"
+        Write-Verbose -Message "Creating new configuration file..."
+        Copy-Item -Path $script:configTemplateFilePath -Destination (Join-Path -Path $configFileFolderPath -ChildPath 'configuration.json')
     }
 }
