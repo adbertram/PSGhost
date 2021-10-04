@@ -1,5 +1,5 @@
 @{
-    RootModule        = 'PSGhost.psm1'
+    RootModule        = 'Ghost.psm1'
     ModuleVersion     = '1.0.0'
     GUID              = '3b4869fa-45a9-41a1-a412-bd07c84559dc'
     Author            = 'Adam Bertram'
